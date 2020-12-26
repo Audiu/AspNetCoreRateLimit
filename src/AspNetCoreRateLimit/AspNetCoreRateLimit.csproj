@@ -4,14 +4,14 @@
     <TargetFrameworks>netcoreapp3.1;netstandard2.0;net5.0;</TargetFrameworks>
     <Description>ASP.NET Core rate limiting middleware</Description>
     <Authors>Stefan Prodan, Cristi Pufu</Authors>
-    <AssemblyName>AspNetCoreRateLimit</AssemblyName>
-    <PackageId>AspNetCoreRateLimit</PackageId>
+    <AssemblyName>RangerAspNetCoreRateLimit</AssemblyName>
+    <PackageId>RangerAspNetCoreRateLimit</PackageId>
     <PackageTags>aspnetcore;rate-limit;throttle</PackageTags>
     <PackageProjectUrl>https://github.com/stefanprodan/AspNetCoreRateLimit</PackageProjectUrl>
     <PackageLicense>http://opensource.org/licenses/MIT</PackageLicense>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/stefanprodan/AspNetCoreRateLimit</RepositoryUrl>
-    <LangVersion>9</LangVersion>
+    <LangVersion>8</LangVersion>
     <Version>3.2.3</Version>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../sgKey.snk</AssemblyOriginatorKeyFile>
