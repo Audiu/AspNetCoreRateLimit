@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 
 namespace AspNetCoreRateLimit
@@ -9,12 +10,14 @@ namespace AspNetCoreRateLimit
     {
         private readonly IConnectionMultiplexer _connectionMultiplexer;
         private readonly IRateLimitConfiguration _config;
+        private readonly ILogger<StackExchangeRedisProcessingStrategy> logger;
 
-        public StackExchangeRedisProcessingStrategy(IConnectionMultiplexer connectionMultiplexer, IRateLimitConfiguration config)
+        public StackExchangeRedisProcessingStrategy(IConnectionMultiplexer connectionMultiplexer, IRateLimitConfiguration config, ILogger<StackExchangeRedisProcessingStrategy> logger)
             : base(config)
         {
             _connectionMultiplexer = connectionMultiplexer ?? throw new ArgumentException("IConnectionMultiplexer was null. Ensure StackExchange.Redis was successfully registered");
             _config = config;
+            this.logger = logger;
         }
 
         static private readonly LuaScript _atomicIncrement = LuaScript.Prepare("local count count = redis.call(\"INCRBYFLOAT\", @key, tonumber(@delta)) if tonumber(count) == @delta then redis.call(\"EXPIRE\", @key, @timeout) end return count");
@@ -31,7 +34,7 @@ namespace AspNetCoreRateLimit
             var numberOfIntervals = now.Ticks / interval.Ticks;
             var intervalStart = new DateTime(numberOfIntervals * interval.Ticks, DateTimeKind.Utc);
 
-            // Call the Lua script
+            logger.LogInformation("Calling Lua script. {counterId}, {timeout}, {delta}", counterId, interval.TotalSeconds, 1D);
             var count = await _connectionMultiplexer.GetDatabase().ScriptEvaluateAsync(_atomicIncrement, new { key = counterId, timeout = interval.TotalSeconds, delta = RateIncrementer?.Invoke() ?? 1D });
             return new RateLimitCounter
             {
