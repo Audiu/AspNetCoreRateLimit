@@ -31,7 +31,7 @@ namespace AspNetCoreRateLimit
             using var algorithm = new SHA1Managed();
             var hash = algorithm.ComputeHash(bytes);
 
-            return Convert.ToBase64String(hash);
+            return $"aspnet-rate-limit:{Convert.ToBase64String(hash)}";
         }
     }
 }

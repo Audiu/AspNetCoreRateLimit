@@ -11,7 +11,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/stefanprodan/AspNetCoreRateLimit.Redis</RepositoryUrl>
     <LangVersion>8</LangVersion>
-    <Version>4.0.0-pre1</Version>
+    <Version>4.0.0-pre2</Version>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../sgKey.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
