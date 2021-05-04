@@ -10,17 +10,17 @@ namespace AspNetCoreRateLimit
     {
         private readonly IConnectionMultiplexer _connectionMultiplexer;
         private readonly IRateLimitConfiguration _config;
-        private readonly ILogger<StackExchangeRedisProcessingStrategy> logger;
+        //private readonly ILogger<StackExchangeRedisProcessingStrategy> logger;
 
-        public StackExchangeRedisProcessingStrategy(IConnectionMultiplexer connectionMultiplexer, IRateLimitConfiguration config, ILogger<StackExchangeRedisProcessingStrategy> logger)
+        public StackExchangeRedisProcessingStrategy(IConnectionMultiplexer connectionMultiplexer, IRateLimitConfiguration config/*, ILogger<StackExchangeRedisProcessingStrategy> logger*/)
             : base(config)
         {
             _connectionMultiplexer = connectionMultiplexer ?? throw new ArgumentException("IConnectionMultiplexer was null. Ensure StackExchange.Redis was successfully registered");
             _config = config;
-            this.logger = logger;
+            //this.logger = logger;
         }
 
-        static private readonly LuaScript _atomicIncrement = LuaScript.Prepare("local count count = redis.call(\"INCRBYFLOAT\", @key, tonumber(@delta)) if count == @delta then redis.call(\"EXPIRE\", @key, @timeout) end return count");
+        private static readonly LuaScript _atomicIncrement = LuaScript.Prepare("local count count = redis.call(\"INCRBYFLOAT\", @key, tonumber(@delta)) if count == @delta then redis.call(\"EXPIRE\", @key, @timeout) end return count");
 
         public override async Task<RateLimitCounter> ProcessRequestAsync(ClientRequestIdentity requestIdentity, RateLimitRule rule, ICounterKeyBuilder counterKeyBuilder, RateLimitOptions rateLimitOptions, CancellationToken cancellationToken = default)
         {
@@ -34,7 +34,7 @@ namespace AspNetCoreRateLimit
             var numberOfIntervals = now.Ticks / interval.Ticks;
             var intervalStart = new DateTime(numberOfIntervals * interval.Ticks, DateTimeKind.Utc);
 
-            logger.LogInformation("Calling Lua script. {counterId}, {timeout}, {delta}", counterId, interval.TotalSeconds, 1D);
+            //logger.LogDebug("Calling Lua script. {counterId}, {timeout}, {delta}", counterId, interval.TotalSeconds, 1D);
             var count = await _connectionMultiplexer.GetDatabase().ScriptEvaluateAsync(_atomicIncrement, new { key = counterId, timeout = interval.TotalSeconds, delta = RateIncrementer?.Invoke() ?? 1D });
             return new RateLimitCounter
             {
