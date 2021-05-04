@@ -11,6 +11,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/stefanprodan/AspNetCoreRateLimit.Redis</RepositoryUrl>
     <LangVersion>8</LangVersion>
+    <Version>4.0.0-pre1</Version>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../sgKey.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
@@ -21,6 +22,9 @@
 
   <ItemGroup>
     <PackageReference Include="StackExchange.Redis" Version="2.2.4" />
-    <PackageReference Include="RangerAspNetCoreRateLimit" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AspNetCoreRateLimit\AspNetCoreRateLimit.csproj" />
   </ItemGroup>
 </Project>

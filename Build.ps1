@@ -33,3 +33,5 @@ exec { & dotnet build -c Release }
 exec { & dotnet test -c Release -r $artifacts --no-build -l trx --verbosity=normal }
 
 exec { & dotnet pack .\src\AspNetCoreRateLimit\AspNetCoreRateLimit.csproj -c Release -o $artifacts --no-build }
+
+exec { & dotnet pack .\src\AspNetCoreRateLimit.Redis\AspNetCoreRateLimit.Redis.csproj -c Release -o $artifacts --no-build }
